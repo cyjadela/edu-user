@@ -1,6 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.GoodsDto;
 import com.example.demo.dto.UserDto;
+import com.example.demo.dto.UserGoodsDto;
+import com.example.demo.service.GoodsService;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +30,22 @@ public class UserRestController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private GoodsService goodsService;
+
     @GetMapping("/{userNo}")
-    public ResponseEntity<UserDto> getUserByuserNo(@PathVariable String userNo) {
+    public ResponseEntity<UserGoodsDto> getUserByUserNo(@PathVariable String userNo) {
         UserDto userDto = userService.getUserByuserNo(userNo);
-        return ResponseEntity.ok(userDto);
+
+        GoodsDto goodsDto = goodsService.getGoodsByGoodsNo(userNo);
+
+        UserGoodsDto userGoodsDto = UserGoodsDto.builder()
+                .userNo(userDto.getUserNo())
+                .userName(userDto.getUserName())
+                .goodsNo(goodsDto.getGoodsNo())
+                .goodsName(goodsDto.getGoodsName())
+                .build();
+
+        return ResponseEntity.ok(userGoodsDto);
     }
 }
