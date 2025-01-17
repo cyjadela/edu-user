@@ -1,3 +1,5 @@
 spring.application.name: demo
 
 app.run.type: local
+
+goods.service.url : http://edu-goods-svc.edu-goods.svc.cluster.local
