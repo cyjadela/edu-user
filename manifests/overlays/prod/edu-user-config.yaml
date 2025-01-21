@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: edu-user-config
+  namespace: edu-user
+data:
+  WELCOME_MSG: "Welcome to edu-user service!"
