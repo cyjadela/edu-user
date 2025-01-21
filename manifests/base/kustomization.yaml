@@ -1,0 +1,5 @@
+resources:
+  - edu-user-config.yaml
+  - edu-user-deploy.yaml
+  - edu-user-ingress.yaml
+  - edu-user-svc.yaml
