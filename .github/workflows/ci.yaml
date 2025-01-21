@@ -9,8 +9,8 @@ on: workflow_dispatch
 
 ## 워크플로우 전역에서 사용할 환경 변수  
 env:
-  REPO_ACCOUNT: ydcho0902
-  IMAGE_NAME: k8s-edu
+  REPO_ACCOUNT: adelacho
+  IMAGE_NAME: k8s-edu-user
 
 ## 실행할 작업 정의 
 jobs:
@@ -51,7 +51,11 @@ jobs:
 
       - name: 'Build & Tag Image'             # docker build, tag 설정     
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_LOGIN_SERVER  }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }} -f Dockerfile .
+          docker docker buildx create --name mybuilder
+          docker buildx use mybuilder
+          docker buildx inspect --bootstrap
+          
+          docker buildx build --platform linux/amd64,linux/arm64 -t ${{ secrets.DOCKERHUB_LOGIN_SERVER  }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }} -f Dockerfile .
           docker tag ${{ secrets.DOCKERHUB_LOGIN_SERVER  }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }} ${{ env.REPO_ACCOUNT  }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
 
       - name: 'Push image'                    # 이미지 푸시를 위해 dockerhub에 로그인 
