@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+#namePrefix: prod-
+resources:
+- ../../base
+#  - pvc.yaml
+patchesStrategicMerge:
+- edu-user-config.yaml
+- edu-user-deploy.yaml
+- edu-user-ingress.yaml
+- edu-user-svc.yaml
+images:
+- name: adelacho/k8s-edu-user
+  newTag: "202501191311"
