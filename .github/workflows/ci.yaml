@@ -51,24 +51,20 @@ jobs:
 
       - name: 'Set up Docker buildx'
         uses: docker/setup-buildx-action@v2
-        
-      - name: 'Build & Tag Image'             # docker build, tag 설정     
-        run: |
-          docker buildx create --name mybuilder --use
-          docker buildx inspect --bootstrap
-          
-          docker buildx build --platform linux/amd64,linux/arm64 -t ${{ secrets.DOCKERHUB_LOGIN_SERVER  }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }} -f Dockerfile .
-          docker tag ${{ secrets.DOCKERHUB_LOGIN_SERVER  }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }} ${{ env.REPO_ACCOUNT  }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
 
-      - name: 'Push image'                    # 이미지 푸시를 위해 dockerhub에 로그인 
+      - name: 'Docker Login'                    # 이미지 푸시를 위해 dockerhub에 로그인 
         uses: docker/login-action@v1          # docker login <login-server> -u <username> -p <password> 내부에서 처리
         with:
           login-server: ${{ secrets.DOCKERHUB_LOGIN_SERVER  }}
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
+        
+      - name: 'Build & Push Image'             # docker build, tag 설정     
+        run: |
+          docker buildx create --name mybuilder --use
+          docker buildx inspect --bootstrap
 
-      - run: |                               # dockerhub에 이미지 푸시 : docker push ydcho0902/k8s-edu:202501191123     
-          docker push ${{ env.REPO_ACCOUNT }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+          docker buildx build --platform linux/amd64,linux/arm64 -t ${{ env.REPO_ACCOUNT }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }} -f Dockerfile --push .
 
       - name: Update Kubernetes resources    # kubernetes 배포 파일에서 docker 이미지 태그 업데이트 
         run: |
