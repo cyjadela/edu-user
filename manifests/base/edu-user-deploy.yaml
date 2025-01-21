@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: edu-user-deploy
+  namespace: edu-user
+  labels:
+    app: edu-user
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: edu-user
+  template:
+    metadata:
+      labels:
+        app: edu-user
+    spec:
+      containers:
+        - name: edu-user
+          image: adelacho/k8s-exam:v0.0.4
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          resources:
+            requests:
+              cpu: "1"
+              memory: "2Gi"
+            limits:
+              cpu: "1"
+              memory: "2Gi"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: prod
+          envFrom:
+            - configMapRef:
+                name: edu-user-config
+      imagePullSecrets:
+        - name: k8s-edu-dockerhub-secret
+          #      nodeSelector:
+          #        kubernetes.io/hostname: worker01
