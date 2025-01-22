@@ -5,10 +5,10 @@ resources:
 - ../../base
 #  - pvc.yaml
 patches:
-  - path: edu-user-config.yaml
-  - path: edu-user-deploy.yaml
-  - path: edu-user-ingress.yaml
-  - path: edu-user-svc.yaml
+- path: edu-user-config.yaml
+- path: edu-user-deploy.yaml
+- path: edu-user-ingress.yaml
+- path: edu-user-svc.yaml
 images:
 - name: adelacho/k8s-edu-user
-  newTag: "202501211502"
+  newTag: "202501221436"
