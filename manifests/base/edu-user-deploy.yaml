@@ -18,7 +18,7 @@ spec:
       containers:
         - name: edu-user
           image: adelacho/k8s-exam:v0.0.5
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - name: http
               containerPort: 8080
