@@ -11,4 +11,4 @@ patches:
 - path: edu-user-svc.yaml
 images:
 - name: adelacho/k8s-edu-user
-  newTag: "202501221436"
+  newTag: "202501221557"
